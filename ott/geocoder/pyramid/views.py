@@ -7,7 +7,7 @@ from pyramid.request import Request
 from pyramid.response import Response
 from pyramid.httpexceptions import HTTPFound
 
-from pyramid.geocoder import _config
+from pyramid.view import view_config
 from pyramid.config import Configurator
 from pyramid.session import UnencryptedCookieSessionFactoryConfig
 
