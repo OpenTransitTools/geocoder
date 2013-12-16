@@ -11,7 +11,7 @@ build:
 
 run:
   1. bin/pserve config/pyramid.ini --reload
-  2. ?
+  2. http://localhost:35553/
 
 test:
   1. bin/nosetests --exe -v
