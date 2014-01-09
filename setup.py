@@ -77,5 +77,18 @@ setup(
     entry_points="""\
         [paste.app_factory]
         main = ott.geocoder.pyramid.app:main
+        
+        [console_scripts]
+        init_loading = ott.geocoding.scripts.util:init_loading
+        
+        gather_osm = ott.geocoder.scripts.osm:gather
+        gather_metro_maf = ott.geocoder.scripts.metroMasterAddressFile:gather
+        gather_tiger_addressRanges = ott.geocoder.scripts.tiger:gather
+        
+        load_osm = ott.geocoder.scripts.osm:load
+        load_metro_maf = ott.geocoder.scripts.metroMasterAddressFile:load
+        load_tiger_addressRanges = ott.geocoder.scripts.tiger:load
+        load_addressExceptions = ott.geocoder.scripts.addressExceptions:load
+        load_fromOtherDBTables = ott.geocoder.scripts.databaseTransfer:load
     """,
 )
