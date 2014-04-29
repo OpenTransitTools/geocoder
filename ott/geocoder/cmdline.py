@@ -33,8 +33,8 @@ def init_parser():
 
 
 def main():
+    #import pdb; pdb.set_trace()
     args = init_parser()
-    import pdb; pdb.set_trace()
     geo = GeoSolr(args.url)
     r = geo.query(args.search, args.limit, args.start)
     for hit in r.results:
