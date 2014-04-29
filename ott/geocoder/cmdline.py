@@ -25,7 +25,7 @@ def init_parser():
     parser.add_argument(
         '--url',
         '-u',
-        default="http://maps10.trimet.org/solr",
+        default="http://maps.trimet.org/solr",
         help='SOLR Url',
     )
     args = parser.parse_args()
@@ -34,6 +34,7 @@ def init_parser():
 
 def main():
     args = init_parser()
+    import pdb; pdb.set_trace()
     geo = GeoSolr(args.url)
     r = geo.query(args.search, args.limit, args.start)
     for hit in r.results:

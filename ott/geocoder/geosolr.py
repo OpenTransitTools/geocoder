@@ -72,23 +72,6 @@ class GeoSolr(object):
         return ret_val
 
 
-    def geocode_old(self, search, rows=1):
-        """
-        """
-        #import pdb; pdb.set_trace()
-        ret_val = None
-        r = self.query(search, rows)
-        if r and r.results:
-            if len(r.results) == 1:
-                ret_val = self.make_geo(r.results[0])
-            elif len(r.results) > 1:
-                ret_val = []
-                for p in r.results:
-                    g =  self.make_geo(p)
-                    ret_val.append(g)
-        return ret_val
-
-
     def geostr(self, search, def_val="NOT FOUND::45.6,-122.65", rows=1):
         """ returns a geo string of the first SOLR hit, ala PLACE::45.5,-122.5
         """
