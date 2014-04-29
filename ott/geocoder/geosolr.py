@@ -82,11 +82,13 @@ class GeoSolr(object):
         return ret_val
 
 
-    def solr(self, search, rows=10, start=0, qt="dismax", pretty=False):
+    def solr(self, search, rows=None, start=0, qt="dismax", pretty=False):
         """ call solr directly, and output the result
             TODO: this might be slower than it neeeds to be ... marshalling to py, then back out to json
         """
         ret_val = {}
+        if rows is None:
+            rows = '10'
         args = "q={0}&rows={1}&start={2}&qt={3}&wt=json".format(search, rows, start, qt)
         ret_val = json_utils.stream_json(self.solr_select, args)
         return ret_val
