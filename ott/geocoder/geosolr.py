@@ -5,7 +5,7 @@ import solr
 from ott.utils import object_utils
 from ott.utils import json_utils
 from ott.utils import html_utils
-from ott.controller.services.model.geo_response import GeoListResponse, GeoResponse
+from ott.data.dao.geo_dao import GeoListDao, GeoDao
 
 """
 
@@ -105,7 +105,6 @@ class GeoSolr(object):
         """
         ret_val = {}
         args = "q={0}&rows={1}&start={2}&qt={3}&wt=json".format(search, rows, start, qt)
-        #print self.solr_select, args
         ret_val = json_utils.stream_json(self.solr_select, args)
         return ret_val
 

@@ -7,7 +7,8 @@ README = open(os.path.join(here, 'README.md')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 requires = [
-    'simplejson'
+    'simplejson',
+    'solrpy',
 ]
 
 extras_require = dict(
@@ -46,6 +47,6 @@ setup(
     test_suite="ott.geocoder.tests",
     entry_points="""\
         [console_scripts]
-        geocode = ott.geocode:main
+        geocode = ott.geocoder.cmdline:main
     """,
 )
