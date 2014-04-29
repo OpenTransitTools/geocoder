@@ -52,13 +52,13 @@ class GeoSolr(object):
         gc = []
         if search:
             doc = self.query(search, rows)
-            gc = self.filter_geo_response(doc)
-        ret_val = GeoListResponse(gc)
+            gc = self.filter_geo_result(doc)
+        ret_val = GeoListDao(gc)
         return ret_val
 
 
     @classmethod
-    def filter_geo_response(cls, doc, limit=50, tolerance=0.5, include_city=False):
+    def filter_geo_result(cls, doc, limit=50, tolerance=0.5, include_city=False):
         ret_val = []
         if doc and doc.results and len(doc.results) > 0:
             top = doc.results[0]
@@ -67,7 +67,7 @@ class GeoSolr(object):
             for d in doc.results:
                 if d['score'] < min_score:
                     break
-                g = GeoResponse.make_geo_response(d)
+                g = GeoDao.make_geo_dao(d)
                 ret_val.append(g)
         return ret_val
 
