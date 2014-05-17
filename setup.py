@@ -10,7 +10,6 @@ requires = [
     'simplejson',
     'solrpy',
     'ott.utils',
-    'ott.data',
 ]
 
 extras_require = dict(
@@ -36,8 +35,7 @@ setup(
     author="Open Transit Tools",
     author_email="info@opentransittools.org",
     dependency_links=[
-        'git+https://github.com/OpenTransitTools/utils.git#egg=ott.utils-0.1.0',
-        'git+https://github.com/OpenTransitTools/data.git#egg=ott.data-0.1.0',
+        'git+https://github.com/OpenTransitTools/utils.git#egg=ott.utils-0.1.0'
     ],
     license="Mozilla-derived (http://opentransittools.com)",
     url='http://opentransittools.com',

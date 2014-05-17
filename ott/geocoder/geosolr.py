@@ -5,7 +5,7 @@ import solr
 from ott.utils import object_utils
 from ott.utils import json_utils
 from ott.utils import html_utils
-from ott.data.dao.geo_dao import GeoListDao, GeoDao
+from .geo_dao  import GeoListDao, GeoDao
 
 """
 
