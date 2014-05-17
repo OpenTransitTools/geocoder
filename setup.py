@@ -32,7 +32,6 @@ setup(
     classifiers=[
         "Programming Language :: Python",
         "Topic :: Internet :: WWW/HTTP",
-        "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
     ],
     author="Open Transit Tools",
     author_email="info@opentransittools.org",
