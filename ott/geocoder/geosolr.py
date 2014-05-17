@@ -36,16 +36,6 @@ class GeoSolr(object):
         ret_val = self.connection.query(search, rows=rows, start=start, qt=qt)
         return ret_val
 
-    # TODO ... add NAME::LAT,LON to SOLR
-    def make_geo(self, doc):
-        ret_val = None
-        name = html_utils.html_escape(doc['name'])
-        lat  = doc['lat']
-        lon  = doc['lon']
-        ret_val = "{0}::{1},{2}".format(name, lat, lon)
-        return ret_val
-
-
     def geocode(self, search, rows=50):
         """ used for stop geocoder
         """
@@ -54,6 +44,14 @@ class GeoSolr(object):
             doc = self.query(search, rows)
             gc = self.filter_geo_result(doc)
         ret_val = GeoListDao(gc)
+        return ret_val
+
+    def make_geo(self, doc):
+        ret_val = None
+        name = html_utils.html_escape(doc['name'])
+        lat  = doc['lat']
+        lon  = doc['lon']
+        ret_val = "{0}::{1},{2}".format(name, lat, lon)
         return ret_val
 
 
