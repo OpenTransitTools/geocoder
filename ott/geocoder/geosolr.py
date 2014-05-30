@@ -42,7 +42,7 @@ class GeoSolr(object):
         gc = []
         if search:
             doc = self.query(search, rows)
-            gc = self.filter_geo_result(doc)
+            gc = self.filter_geo_result(doc, search)
         ret_val = GeoListDao(gc)
         return ret_val
 
@@ -54,19 +54,36 @@ class GeoSolr(object):
         ret_val = "{0}::{1},{2}".format(name, lat, lon)
         return ret_val
 
+    @classmethod
+    def similar_records(cls, rec1, rec2, dist_diff=0.01):
+        ret_val = False
+        if rec1 and rec2:
+            if  object_utils.str_compare(rec1['name'], rec2['name']) \
+            and object_utils.str_compare(rec1['city'], rec2['city']):
+                ret_val = True
+        return ret_val
 
     @classmethod
-    def filter_geo_result(cls, doc, limit=50, tolerance=0.5, include_city=False):
+    def filter_geo_result(cls, doc, search, limit=50, tolerance=0.5, include_city=False):
+        ''' will filter out the geocoder results based on a handful of rules, like
+             1) avoid duplicates
+             2) match on exact name ... and avoid the rest
+             3) look at the matching score, and filter out those hits that fall below a certain tolerance 
+        '''
         ret_val = []
         if doc and doc.results and len(doc.results) > 0:
             top = doc.results[0]
             top_score = top['score']
             min_score = top_score * tolerance
+            prev = None
             for d in doc.results:
                 if d['score'] < min_score:
                     break
+                if cls.similar_records(prev, d):
+                    continue
                 g = GeoDao.make_geo_dao(d)
                 ret_val.append(g)
+                prev = d
         return ret_val
 
 
