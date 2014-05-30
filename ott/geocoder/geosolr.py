@@ -60,6 +60,7 @@ class GeoSolr(object):
         if rec1 and rec2:
             if  object_utils.str_compare(rec1['name'], rec2['name']) \
             and object_utils.str_compare(rec1['city'], rec2['city']):
+            # TODO ... could check distance too...  similar lat => lat and lon => lon
                 ret_val = True
         return ret_val
 
