@@ -73,13 +73,28 @@ class GeoSolr(object):
         '''
         ret_val = []
         if doc and doc.results and len(doc.results) > 0:
+            # step 1: find a low score floor
             top = doc.results[0]
             top_score = top['score']
             min_score = top_score * tolerance
+
+            # step 2: determine if our search string is all or part of the top result (see below in for loop)
+            #         e.g., we might have 1 Main Street as a search string, so we want to return all hits for that exact match
+            match_only   = False
+            match_within = False
+            if top['name'] == search:
+                match_only = True
+            elif search in top['name']:
+                match_within = True
+
             prev = None
             for d in doc.results:
                 if d['score'] < min_score:
                     break
+                if match_only and d['name'] != search:
+                    continue
+                elif match_within and search not in d['name']:
+                    continue
                 if cls.similar_records(prev, d):
                     continue
                 g = GeoDao.make_geo_dao(d)
