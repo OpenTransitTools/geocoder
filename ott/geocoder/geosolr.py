@@ -82,18 +82,19 @@ class GeoSolr(object):
             #         e.g., we might have 1 Main Street as a search string, so we want to return all hits for that exact match
             match_only   = False
             match_within = False
-            if top['name'] == search:
+            search = search.lower()
+            if top['name'].lower() == search:
                 match_only = True
-            elif search in top['name']:
+            elif search in top['name'].lower():
                 match_within = True
 
             prev = None
             for d in doc.results:
                 if d['score'] < min_score:
                     break
-                if match_only and d['name'] != search:
+                if match_only and d['name'].lower() != search:
                     continue
-                elif match_within and search not in d['name']:
+                elif match_within and search not in d['name'].lower():
                     continue
                 if cls.similar_records(prev, d):
                     continue
