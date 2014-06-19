@@ -90,17 +90,32 @@ class GeoSolr(object):
 
             prev = None
             for d in doc.results:
+
+                # condition 1: breaking after a certain hit score it seen
                 if d['score'] < min_score:
                     break
+
+                # condition 2: matching exact strings (engaged when first result == record name) 
                 if match_only and d['name'].lower() != search:
                     continue
-                elif match_within and search not in d['name'].lower():
+
+                # condition 3: strin partial match
+                if match_within and search not in d['name'].lower():
                     continue
+
+                # condition 4: filter multiple records with same name/city (e.g., only one PDX in result) 
                 if cls.similar_records(prev, d):
                     continue
+
+                # make the geocode record
                 g = GeoDao.make_geo_dao(d)
                 ret_val.append(g)
                 prev = d
+                import pdb; pdb.set_trace() 
+                # condition 5: break if we see the search string match a stop id
+                if d['stop_id'] and search == d['stop_id']:
+                    break
+
         return ret_val
 
 
