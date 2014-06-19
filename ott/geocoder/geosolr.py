@@ -111,9 +111,9 @@ class GeoSolr(object):
                 g = GeoDao.make_geo_dao(d)
                 ret_val.append(g)
                 prev = d
-                import pdb; pdb.set_trace() 
-                # condition 5: break if we see the search string match a stop id
-                if d['stop_id'] and search == d['stop_id']:
+
+                # condition 5: break if we see the search string fully match the stop id
+                if 'stop_id' in d and search == d['stop_id']:
                     break
 
         return ret_val
