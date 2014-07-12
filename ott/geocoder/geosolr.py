@@ -32,6 +32,7 @@ class GeoSolr(object):
         """ call solr
             @see: http://maps.trimet.org/solr/select?rows=10&start=0&qt=dismax&q=x
         """
+        #import pdb; pdb.set_trace()
         ret_val = None
         ret_val = self.connection.query(search, rows=rows, start=start, qt=qt)
         return ret_val
