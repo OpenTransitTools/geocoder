@@ -28,13 +28,13 @@ class GeoSolr(object):
         self.connection = solr.SolrConnection(url)
         log.debug("create an instance of {0}".format(self.__class__.__name__))
 
-    def query(self, search, rows=10, start=0, qt="dismax"):
+    def query(self, search, rows=10, start=0, qt="dismax", fq="(-type:26 AND -type:route)"):
         """ call solr
-            @see: http://maps.trimet.org/solr/select?rows=10&start=0&qt=dismax&q=x
+            @see: http://maps.trimet.org/solr/select?start=0&rows=10&qt=dismax&fq=(-type:26 AND -type:route)&q=zoo
         """
         #import pdb; pdb.set_trace()
         ret_val = None
-        ret_val = self.connection.query(search, rows=rows, start=start, qt=qt)
+        ret_val = self.connection.query(search, start=start, rows=rows, qt=qt, fq=fq)
         return ret_val
 
     def geocode(self, search, rows=50):
