@@ -36,20 +36,3 @@ class GeoDao(BaseDao):
         score = doc['score']
         ret_val = GeoDao(name, lat, lon, city, stop_id, type, type_name, score)
         return ret_val
-
-    @classmethod
-    def make_geo(cls, doc):
-        name = html_utils.html_escape(doc['name'])
-        lat  = doc['lat']
-        lon  = doc['lon']
-        ret_val = "{0}::{1},{2}".format(name, lat, lon)
-        return ret_val
-
-    @classmethod
-    def make_geo_plus_city(cls, doc):
-        ret_val = cls.make_geo(doc)
-        city = html_utils.html_escape(doc['city'])
-        if city:
-            ret_val = "{0}::{1}".format(ret_val, city)
-        return ret_val
-

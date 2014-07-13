@@ -5,6 +5,7 @@ import solr
 from ott.utils import object_utils
 from ott.utils import json_utils
 from ott.utils import html_utils
+from ott.utils import geo_utils
 from .geo_dao  import GeoListDao, GeoDao
 
 """
@@ -45,14 +46,6 @@ class GeoSolr(object):
             doc = self.query(search, rows)
             gc = self.filter_geo_result(doc, search)
         ret_val = GeoListDao(gc)
-        return ret_val
-
-    def make_geo(self, doc):
-        ret_val = None
-        name = html_utils.html_escape(doc['name'])
-        lat  = doc['lat']
-        lon  = doc['lon']
-        ret_val = "{0}::{1},{2}".format(name, lat, lon)
         return ret_val
 
     @classmethod
@@ -126,7 +119,7 @@ class GeoSolr(object):
         ret_val = def_val
         r = self.query(search, rows)
         if r and r.results:
-            ret_val = self.make_geo(r.results[0])
+            ret_val = geo_utils.make_geo(r.results[0])
         return ret_val
 
 
