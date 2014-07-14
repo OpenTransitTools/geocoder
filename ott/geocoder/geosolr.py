@@ -119,7 +119,7 @@ class GeoSolr(object):
         ret_val = def_val
         r = self.query(search, rows)
         if r and r.results:
-            ret_val = geo_utils.make_geo(r.results[0])
+            ret_val = geo_utils.solr_to_named_param(r.results[0])
         return ret_val
 
 
