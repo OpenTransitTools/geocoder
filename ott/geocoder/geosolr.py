@@ -1,6 +1,7 @@
 import logging
 log = logging.getLogger(__file__)
 
+import re
 import solr
 from ott.utils import object_utils
 from ott.utils import json_utils
@@ -27,6 +28,7 @@ class GeoSolr(object):
         self.solr_url = url
         self.solr_select = url + "/select"
         self.connection = solr.SolrConnection(url)
+        self.address_re = None
         log.debug("create an instance of {0}".format(self.__class__.__name__))
 
     def query(self, search, rows=10, start=0, qt="dismax", fq="(-type:26 AND -type:route)"):
@@ -77,28 +79,37 @@ class GeoSolr(object):
             #         e.g., we might have 1 Main Street as a search string, so we want to return all hits for that exact match
             match_only   = False
             match_within = False
-            search = search.lower()
-            if top['name'].lower() == search:
+            search = search.trim().lower()
+            if search == top['name'].trim().lower():
                 match_only = True
-            elif search in top['name'].lower():
+            elif search in top['name'].trim().lower():
                 match_within = True
+
+            # step 3: set up the filter types (e.g., filter stops if we see a string like "[number]+ [compass direction]"
+            filter_stops = False
+            if self.is_address(search):
+                filter_stops = True
 
             prev = None
             for d in doc.results:
 
-                # condition 1: breaking after a certain hit score it seen
-                if d['score'] < min_score:
-                    break
+                # condition 1: filter types
+                if filter_stops and d['type'] == 'stop':
+                    continue
 
                 # condition 2: matching exact strings (engaged when first result == record name) 
                 if match_only and d['name'].lower() != search:
                     continue
 
-                # condition 3: strin partial match
+                # condition 3: breaking after a certain hit score it seen
+                if d['score'] < min_score:
+                    break
+
+                # condition 4: string partial match
                 if match_within and search not in d['name'].lower():
                     continue
 
-                # condition 4: filter multiple records with same name/city (e.g., only one PDX in result) 
+                # condition 5: filter multiple records with same name/city (e.g., only one PDX in result) 
                 if cls.similar_records(prev, d):
                     continue
 
@@ -111,6 +122,19 @@ class GeoSolr(object):
                 if 'stop_id' in d and search == d['stop_id']:
                     break
 
+        return ret_val
+
+
+    def is_address(self, str):
+        ''' does string look like an (US postal) address
+        '''
+        ret_val = None
+        try:
+            if self.address_re == None:
+                self.address_re = re.compile("^[0-9]+[\s\w]+\s(north|south|east|west|n|s|e|w){1,2}(?=\s|$)", re.IGNORECASE)
+            ret_val = self.address_re.search(str)
+        except:
+            self.address_re = None
         return ret_val
 
 
