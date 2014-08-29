@@ -87,15 +87,17 @@ class GeoSolr(object):
 
             # step 3: set up the filter types (e.g., filter stops if we see a string like "[number]+ [compass direction]"
             filter_stops = False
+            filter_zips  = False
             if self.is_address(search):
                 filter_stops = True
+                filter_zips  = True
 
             prev = None
             for d in doc.results:
 
                 # condition 1: filter types
-                if filter_stops and d['type'] == 'stop':
-                    continue
+                if filter_stops and d['type'] == 'stop':      continue
+                if filter_zips  and d['type'] == 'zipcode':   continue
 
                 # condition 2: matching exact strings (engaged when first result == record name) 
                 if match_only and d['name'].lower() != search:
