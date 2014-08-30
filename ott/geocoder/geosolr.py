@@ -61,8 +61,8 @@ class GeoSolr(object):
                 ret_val = True
         return ret_val
 
-    @classmethod
-    def filter_geo_result(cls, doc, search, limit=50, tolerance=0.5, include_city=False):
+
+    def filter_geo_result(self, doc, search, limit=50, tolerance=0.5, include_city=False):
         ''' will filter out the geocoder results based on a handful of rules, like
              1) avoid duplicates
              2) match on exact name ... and avoid the rest
@@ -79,10 +79,10 @@ class GeoSolr(object):
             #         e.g., we might have 1 Main Street as a search string, so we want to return all hits for that exact match
             match_only   = False
             match_within = False
-            search = search.trim().lower()
-            if search == top['name'].trim().lower():
+            search = search.strip().lower()
+            if search == top['name'].strip().lower():
                 match_only = True
-            elif search in top['name'].trim().lower():
+            elif search in top['name'].strip().lower():
                 match_within = True
 
             # step 3: set up the filter types (e.g., filter stops if we see a string like "[number]+ [compass direction]"
@@ -112,7 +112,7 @@ class GeoSolr(object):
                     continue
 
                 # condition 5: filter multiple records with same name/city (e.g., only one PDX in result) 
-                if cls.similar_records(prev, d):
+                if self.similar_records(prev, d):
                     continue
 
                 # make the geocode record
@@ -123,6 +123,22 @@ class GeoSolr(object):
                 # condition 5: break if we see the search string fully match the stop id
                 if 'stop_id' in d and search == d['stop_id']:
                     break
+
+        # condition 6: if we just have two address points, which are close by (e.g., intersections), just return one point
+        if len(ret_val) == 2 and ret_val[0].type == 'address':
+            a = ret_val[0]
+            b = ret_val[1]
+            if a.is_same_type(b) and a.is_nearby(b):
+                ret_val = []
+                ret_val.append(a)
+
+        # condition 7: match name,city exactly...
+        if len(ret_val) > 1:
+            for g in ret_val:
+                if g.matches_name_city():
+                    ret_val = []
+                    ret_val.append(g)
+
 
         return ret_val
 
