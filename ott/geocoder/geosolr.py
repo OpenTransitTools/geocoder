@@ -1,7 +1,6 @@
 import logging
 log = logging.getLogger(__file__)
 
-import re
 import solr
 from ott.utils import object_utils
 from ott.utils import json_utils
@@ -93,7 +92,7 @@ class GeoSolr(object):
             # step 3: set up the filter types (e.g., filter stops if we see a string like "[number]+ [compass direction]"
             filter_stops = False
             filter_zips  = False
-            if self.is_address(search):
+            if geo_utils.is_address(search):
                 filter_stops = True
                 filter_zips  = True
 
@@ -150,19 +149,6 @@ class GeoSolr(object):
                     ret_val = []
                     ret_val.append(a)
 
-        return ret_val
-
-
-    def is_address(self, str):
-        ''' does string look like an (US postal) address
-        '''
-        ret_val = None
-        try:
-            if self.address_re == None:
-                self.address_re = re.compile("^[0-9]+[\s\w]+\s(north|south|east|west|n|s|e|w){1,2}(?=\s|$)", re.IGNORECASE)
-            ret_val = self.address_re.search(str)
-        except:
-            self.address_re = None
         return ret_val
 
 
