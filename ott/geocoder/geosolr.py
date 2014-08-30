@@ -55,8 +55,7 @@ class GeoSolr(object):
         if rec1 and rec2:
             if  object_utils.str_compare(rec1['name'], rec2['name']) \
             and object_utils.str_compare(rec1['city'], rec2['city']) \
-            and object_utils.str_compare(rec1['lat'],  rec2['lat'])  \
-            and object_utils.str_compare(rec1['lon'],  rec2['lon']):
+            and geo_utils.is_nearby(rec1['lat'], rec1['lon'], rec2['lat'], rec2['lon']):
                 ret_val = True
         return ret_val
 
