@@ -22,13 +22,13 @@ class GeoDao(BaseDao):
         self.lat  = html_utils.html_escape_num(lat)
         self.lon  = html_utils.html_escape_num(lon)
         self.stop_id = html_utils.html_escape_num(stop_id)
+        self.type_name = html_utils.html_escape_num(type_name)
         self.type = type
-        self.type_name = type_name
         self.score = score
 
     @classmethod
     def make_geo_dao(cls, doc):
-        name = html_utils.html_escape(doc['name'])
+        name = doc['name']
         city = object_utils.safe_dict_val(doc, 'city', '').title()
         lat  = doc['lat']
         lon  = doc['lon']
