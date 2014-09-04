@@ -4,6 +4,8 @@
 .DS_store
 nohup.out
 backup
+www2.census.gov
+
 
 # C extensions
 *.so
