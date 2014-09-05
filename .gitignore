@@ -1,4 +1,9 @@
 *~
+.*~
+#*
+*#
+.*#
+.#*
 *.py[cod]
 .settings
 .DS_store
@@ -6,7 +11,7 @@ nohup.out
 backup
 www2.census.gov
 ftp2.census.gov
-
+tmp
 
 # C extensions
 *.so
