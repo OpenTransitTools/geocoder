@@ -43,9 +43,12 @@ class GeoSolr(object):
         """
         gc = []
         if search:
-            if geo_utils.():
-            recs = self.query(search, rows)
-            gc = self.filter_geo_result(recs, search)
+            if geo_utils.contains_coord(search):
+                dao = GeoDao.make_geo_dao_from_named_str(search)
+                gc.append(dao)
+            else:
+                recs = self.query(search, rows)
+                gc = self.filter_geo_result(recs, search)
         ret_val = GeoListDao(gc)
         return ret_val
 

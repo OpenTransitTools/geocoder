@@ -48,7 +48,7 @@ class GeoDao(BaseDao):
         lat  = doc['lat']
         lon  = doc['lon']
         city = doc['city']
-        ret_val = GeoDao(name, lat, lon, city)
+        ret_val = GeoDao(name, lat, lon, city, None, 'place', 'Place', 100.0)
 
     def is_same_type(self, other_geo):
         ''' compares this Geo object vs another Geo object 
