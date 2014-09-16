@@ -39,6 +39,17 @@ class GeoDao(BaseDao):
         ret_val = GeoDao(name, lat, lon, city, stop_id, type, type_name, score)
         return ret_val
 
+    @classmethod
+    def make_geo_dao_from_named_str(cls, str):
+        ''' take a string (like 'LAT,LON; NAME::LAT,LON; or NAME::LAT,LON::CITY) and return a dao
+        '''
+        doc = geo_utils.from_place_str(str)
+        name = doc['name']
+        lat  = doc['lat']
+        lon  = doc['lon']
+        city = doc['city']
+        ret_val = GeoDao(name, lat, lon, city)
+
     def is_same_type(self, other_geo):
         ''' compares this Geo object vs another Geo object 
             sees whether their 'type' attributes match

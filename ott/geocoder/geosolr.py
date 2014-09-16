@@ -43,6 +43,7 @@ class GeoSolr(object):
         """
         gc = []
         if search:
+            if geo_utils.():
             recs = self.query(search, rows)
             gc = self.filter_geo_result(recs, search)
         ret_val = GeoListDao(gc)
