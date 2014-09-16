@@ -34,7 +34,6 @@ class GeoSolr(object):
         """ call solr
             @see: http://maps.trimet.org/solr/select?start=0&rows=10&qt=dismax&fq=(-type:26 AND -type:route)&q=zoo
         """
-        #import pdb; pdb.set_trace()
         ret_val = None
         ret_val = self.connection.query(search, start=start, rows=rows, qt=qt, fq=fq)
         return ret_val
@@ -48,17 +47,6 @@ class GeoSolr(object):
             gc = self.filter_geo_result(recs, search)
         ret_val = GeoListDao(gc)
         return ret_val
-
-    @classmethod
-    def similar_records(cls, rec1, rec2, dist_diff=0.01):
-        ret_val = False
-        if rec1 and rec2:
-            if  object_utils.str_compare(rec1['name'], rec2['name']) \
-            and object_utils.str_compare(rec1['city'], rec2['city']) \
-            and geo_utils.is_nearby(rec1['lat'], rec1['lon'], rec2['lat'], rec2['lon']):
-                ret_val = True
-        return ret_val
-
 
     def filter_geo_result(self, recs, search, limit=50, tolerance=0.5, include_city=False):
         ''' will filter out the geocoder results based on a handful of rules, like
@@ -99,7 +87,7 @@ class GeoSolr(object):
             for d in recs.results:
                 rec_name = d['name'].strip().lower()
                 rec_city = None
-                if d['city'] and len(d['city']) > 0:
+                if 'city' in d and len(d['city']) > 0:
                     rec_city = d['city'].strip().lower()
 
                 # condition 1: filter types
@@ -170,6 +158,18 @@ class GeoSolr(object):
             rows = '10'
         args = "q={0}&rows={1}&start={2}&qt={3}&wt=json".format(search, rows, start, qt)
         ret_val = json_utils.stream_json(self.solr_select, args)
+        return ret_val
+
+
+    @classmethod
+    def similar_records(cls, rec1, rec2, dist_diff=0.01):
+        ret_val = False
+        if rec1 and rec2:
+            if  object_utils.str_compare(rec1['name'], rec2['name']) \
+            and geo_utils.is_nearby(rec1['lat'], rec1['lon'], rec2['lat'], rec2['lon']):
+                ret_val = True
+                if 'city' in rec1 and 'city' in rec2 and not object_utils.str_compare(rec1['city'], rec2['city']):
+                    ret_val = False
         return ret_val
 
 
