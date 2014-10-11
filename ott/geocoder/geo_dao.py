@@ -12,6 +12,19 @@ class GeoListDao(BaseDao):
         super(GeoListDao, self).__init__()
         self.results = results
 
+    @classmethod
+    def make_geo_list_dao(cls, doc):
+        res = []
+        ret_val = GeoListDao(res)
+        try:
+            for r in doc['results']:
+                g = GeoDao.make_geo_dao(r)
+                res.append(g)
+            pass
+        except Exception, e:
+            pass
+        return ret_val
+
 
 class GeoDao(BaseDao):
     def __init__(self, name, lat, lon, city, stop_id, type, type_name, score):
