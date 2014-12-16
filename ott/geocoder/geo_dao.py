@@ -46,9 +46,16 @@ class GeoDao(BaseDao):
         lat  = doc['lat']
         lon  = doc['lon']
         stop_id = object_utils.safe_dict_val(doc, 'stop_id')
-        type = doc['type']
-        type_name = doc['type_name']
         score = doc['score']
+
+        # stupid ATIS override (e.g., "Stop ID {x}" in name, so look for that formatting) ...
+        if " Stop ID " in name:
+            type = 'stop'
+            type_name = 'Stop ID'
+        else:
+            type = doc['type']
+            type_name = doc['type_name']
+
         ret_val = GeoDao(name, lat, lon, city, stop_id, type, type_name, score)
         return ret_val
 
