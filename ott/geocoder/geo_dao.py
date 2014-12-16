@@ -39,8 +39,8 @@ class GeoDao(BaseDao):
 
         # stupid ATIS override (e.g., "Stop ID {x}" in name, so look for that formatting) ...
         if " Stop ID " in name:
-            type_name = html_utils.html_escape_num('Stop ID')
-            type = 'stop'
+            self.type_name = html_utils.html_escape_num('Stop ID')
+            self.type = 'stop'
         else:
             self.type_name = html_utils.html_escape_num(type_name)
             self.type = type
