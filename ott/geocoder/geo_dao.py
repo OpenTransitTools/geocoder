@@ -34,16 +34,10 @@ class GeoDao(BaseDao):
         self.city = html_utils.html_escape(city)
         self.lat  = html_utils.html_escape_num(lat)
         self.lon  = html_utils.html_escape_num(lon)
-        self.stop_id = html_utils.html_escape_num(stop_id)
         self.score = score
-
-        # stupid ATIS override (e.g., "Stop ID {x}" in name, so look for that formatting) ...
-        if " Stop ID " in name:
-            self.type_name = html_utils.html_escape_num('Stop ID')
-            self.type = 'stop'
-        else:
-            self.type_name = html_utils.html_escape_num(type_name)
-            self.type = type
+        self.stop_id = html_utils.html_escape_num(stop_id)
+        self.type_name = html_utils.html_escape_num(type_name)
+        self.type = type
 
     @classmethod
     def make_geo_dao(cls, doc):
