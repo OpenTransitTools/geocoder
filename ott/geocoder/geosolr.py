@@ -1,7 +1,6 @@
 import logging
 log = logging.getLogger(__file__)
 
-import solr
 from ott.utils import object_utils
 from ott.utils import json_utils
 from ott.utils import html_utils
@@ -26,8 +25,10 @@ class GeoSolr(object):
     def __init__(self, url):
         self.solr_url = url
         self.solr_select = url + "/select"
-        self.connection = solr.SolrConnection(url)
         self.address_re = None
+
+        import solr  # note: import is here due to not be compatible with python 3.x
+        self.connection = solr.SolrConnection(url)
         log.debug("create an instance of {0}".format(self.__class__.__name__))
 
     def query(self, search, rows=10, start=0, qt="dismax", fq="(-type:26 AND -type:route)"):

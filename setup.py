@@ -8,20 +8,14 @@ CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 requires = [
     'simplejson',
-    'solrpy',
     'ott.utils',
 ]
+if sys.version_info[:2] < (3, 0):
+    requires.extend(['solrpy'])  # sadly, solrpy doesn't work with py 3.x (June 2018) -- TODO remove/replace dependency
 
 extras_require = dict(
     dev=[],
 )
-
-#
-# eggs that you need if you're running a version of python lower than 2.7
-#
-if sys.version_info[:2] < (2, 7):
-    requires.extend(['argparse>=1.2.1', 'unittest2>=0.5.1'])
-
 
 setup(
     name='ott.geocoder',
