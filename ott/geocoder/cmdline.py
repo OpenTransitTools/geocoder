@@ -1,6 +1,7 @@
 import argparse
 from .geosolr import GeoSolr
 
+
 def init_parser():
     parser = argparse.ArgumentParser(
         prog='ott geocoder (wrapper)',
@@ -38,10 +39,10 @@ def main():
     geo = GeoSolr(args.url)
     r = geo.query(args.search, args.limit, args.start)
     for hit in r.results:
-        print hit
-        print
-    
-    print r
+        print(hit)
+
+    print(r)
+
 
 if __name__ == '__main__':
     main()

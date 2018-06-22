@@ -3,6 +3,7 @@ import unittest
 from ott.geocoder.geosolr import GeoSolr
 import json
 
+
 class TestSolr(unittest.TestCase):
     def setUp(self):
         self.geo = GeoSolr("http://maps10.trimet.org/solr")
@@ -35,7 +36,7 @@ class TestSolr(unittest.TestCase):
     def test_named_latlon(self):
         j = self.geo.geocode("THIS PLACE::-122.5,45.5")
         s = j.to_json()
-        print s
+        print(s)
         self.assertEqual(j.status_code, 200)
         self.assertEqual(len(j.results), 1)
         self.assertRegexpMatches(s, "THIS PLACE")
