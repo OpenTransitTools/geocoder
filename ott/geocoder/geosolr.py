@@ -26,10 +26,14 @@ class GeoSolr(object):
         self.solr_url = url
         self.solr_select = url + "/select"
         self.address_re = None
-
-        import solr  # note: import is here due to not be compatible with python 3.x
-        self.connection = solr.SolrConnection(url)
-        log.debug("create an instance of {0}".format(self.__class__.__name__))
+        self.connection = None
+        try:
+            import solr  # note: import is here due to not be compatible with python 3.x
+            self.connection = solr.SolrConnection(url)
+            log.debug("create an instance of {0}".format(self.__class__.__name__))
+        except Exception as e:
+            log.error("Getting an error ... probably means you're running on python 3, and import solr not working")
+            log.error(e)
 
     def query(self, search, rows=10, start=0, qt="dismax", fq="(-type:26 AND -type:route)"):
         """ call solr
