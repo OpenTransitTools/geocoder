@@ -1,11 +1,12 @@
-import logging
-log = logging.getLogger(__file__)
-
 from ott.utils import object_utils
 from ott.utils import json_utils
 from ott.utils import html_utils
 from ott.utils import geo_utils
 from .geo_dao  import GeoListDao, GeoDao
+
+import logging
+log = logging.getLogger(__file__)
+
 
 """
 
@@ -152,9 +153,12 @@ class GeoSolr(object):
         """ returns a geo string of the first SOLR hit, ala PLACE::45.5,-122.5
         """
         ret_val = def_val
-        r = self.query(search, rows)
-        if r and r.results:
-            ret_val = geo_utils.solr_to_named_param(r.results[0])
+        try:
+            r = self.query(search, rows)
+            if r and r.results:
+                ret_val = geo_utils.solr_to_named_param(r.results[0])
+        except:
+            pass
         return ret_val
 
 
